@@ -4,7 +4,7 @@ import polars as pl
 
 def main() -> None:
     """
-    Command line interface
+    Command line interface for MonarchToMintToReport utility
     """
     kwargs = {
         'description': 'Convert a Monarch transaction export CSV file to a Mint transaction log to open in MintToReport',
@@ -20,22 +20,26 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    convert(args.input, args.output)
+    df = _convert(args.input)
+    result = _output_mint_csv(df, args.output)
     
-    return None
+    return result
 
 
 
-def convert(input: str, output: str) -> pl.DataFrame:
-    """
-    :param input: _description_
+def _convert(input: str) -> pl.DataFrame:
+    """Read a Monarch CSV transaction file and convert to Mint, return as a pl.DataFrame
+    
+    Parameters
+    ----------
+    :param input: path to a Monarch exported CSV transaction file
     :type input: str
-    :param output: _description_
-    :type output: str
-    :return: _description_
+    
+    Returns
+    -----------
+    :return: A Polars DataFrame converted to Mint format
     :rtype: pl.DataFrame
     """
-    
     
     df = pl.read_csv(input, try_parse_dates=True)
     print(df.head)
@@ -68,28 +72,31 @@ def convert(input: str, output: str) -> pl.DataFrame:
         pl.col("Account Name"), 
         pl.col("Labels"), 
         pl.col("Notes")  
-    ])
-    df_export.write_csv(output, date_format=("%m/%d/%Y")) 
+    ])    
     
     return df_export
 
-if __name__ == '__main__':
-    main()    
-    
 
-
-
-#def _load_apache_logs(apache_logs_dir):
-    """
-    Parses apache logs.
+def _output_mint_csv(df: pl.DataFrame, output: str) -> bool:
+    """Write out the dataframe in CSV format to the output path specified
 
     Parameters
     ----------
-    apache_logs_dir: str
-        dir with apache log files
-
+    :param df: The DataFrame to write
+    :type df: pl.DataFrame 
+    :param output: File path to write CSV out
+    :type output: str
+    
     Returns
-    -------
-    polars.DataFrame
-        parsed requests information
+    -----------
+    :return: If the CSV file was written successfully or not
+    :rtype: bool
     """
+    
+    df.write_csv(output, date_format=("%m/%d/%Y"))
+    
+    return True
+
+
+if __name__ == '__main__':
+    main()    

@@ -32,6 +32,9 @@ documentation = "https://github.com/mwengren/monarchtominttoreport"
 homepage = "https://github.com/mwengren/monarchtominttoreport"
 repository = "https://github.com/mwengren/monarchtominttoreport"
 
+[project.scripts]
+monarchtominttoreport = "monarchtominttoreport.convert:main"
+
 [tool.setuptools]
 packages = ["monarchtominttoreport"]
 include-package-data = true
