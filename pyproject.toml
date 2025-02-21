@@ -2,7 +2,7 @@
 build-backend = "setuptools.build_meta"
 requires = [
   "setuptools>=61.0",
-  "setuptools_scm",
+  "setuptools_scm>=8",
   "wheel",
 ]
 
@@ -41,8 +41,10 @@ include-package-data = true
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+version = {attr = "monarchtominttoreport.__version__"}
 
 [tool.setuptools_scm]
+version_file = "monarchtominttoreport/_version.py"
 
 [tool.check-manifest]
 ignore = [  

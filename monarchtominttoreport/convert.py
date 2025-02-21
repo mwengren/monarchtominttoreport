@@ -1,4 +1,5 @@
 import argparse
+import sys
 import polars as pl
 
 
@@ -40,8 +41,11 @@ def _convert(input: str) -> pl.DataFrame:
     :return: A Polars DataFrame converted to Mint format
     :rtype: pl.DataFrame
     """
-    
-    df = pl.read_csv(input, try_parse_dates=True)
+    try:
+        df = pl.read_csv(input, try_parse_dates=True)
+    except:
+        print("Source CSV file was not able to be parsed properly.  Check that the file exists and is a valid CSV format.")
+        sys.exit()
     print(df.head)
     
     df = df.with_columns(

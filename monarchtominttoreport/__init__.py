@@ -1,10 +1,13 @@
 """
 monarchtominttoreport
 """
-
+__version__ = "0.1a"
 __all__ = ["convert"]
 
+from importlib.metadata import version, PackageNotFoundError
+
 try:
-    from ._version import __version__
-except ImportError:
-    __version__ = "unknown"
+    __version__ = version("monarchtominttoreport")
+except PackageNotFoundError:
+    # package is not installed
+    pass
