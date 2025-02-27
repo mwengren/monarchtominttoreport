@@ -50,7 +50,7 @@ def _convert(input: str) -> pl.DataFrame:
     
     df = df.with_columns(
         pl.col("Original Statement").alias("Original Description"),
-        pl.col("Tags").alias("Labels"),
+        pl.col("Tags").str.replace(","," ").alias("Labels"),
         pl.col("Account").alias("Account Name"),
         pl.when(pl.col("Amount") > 0)
             .then(pl.lit("credit"))
