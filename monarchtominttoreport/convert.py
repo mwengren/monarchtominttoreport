@@ -1,6 +1,9 @@
 import argparse
 import sys
 import polars as pl
+from io import BytesIO, StringIO
+from typing import IO
+from pathlib import Path
 
 
 def main() -> None:
@@ -21,36 +24,57 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    df = _convert(args.input)
-    result = _output_mint_csv(df, args.output)
+    df = _read_csv(args.input, dump = True)
+    df = _convert(df, dump = True)
+    result = write_mint_csv(df, args.output)
     
     return result
 
 
+def _read_csv(source: str | Path | IO[str] | IO[bytes] | bytes, dump = False) -> pl.DataFrame:
+    """Read a Monarch CSV transaction file, return as a pl.DataFrame
 
-def _convert(input: str) -> pl.DataFrame:
-    """Read a Monarch CSV transaction file and convert to Mint, return as a pl.DataFrame
-    
     Parameters
     ----------
-    :param input: path to a Monarch exported CSV transaction file
-    :type input: str
+    :param source: a compatible type (str, Path, IO[str], IO[bytes], bytes) that points to a Monarch CSV transaction file
+    :type source: str, Path, IO[str], IO[bytes], bytes
+    :param dump: print the head of the resulting DataFrame (default: False)
+    :type dump: bool
     
+    Returns
+    -----------
+    :return: A Polars DataFrame
+    :rtype: pl.DataFrame
+    """
+    try:
+        df = pl.read_csv(source, try_parse_dates=True)
+    except:
+        print("Source CSV file was not able to be parsed properly.  Check that the file exists and is a valid CSV format.")
+        sys.exit()
+
+    if dump == True: print(df.head)
+    return df
+
+
+def _convert(df: pl.DataFrame, dump = False) -> pl.DataFrame:
+    """Read a Monarch CSV transaction file and convert to Mint, return as a pl.DataFrame
+
+    Parameters
+    ----------
+    :param df: DataFrame containing a Monarch-formatted CSV transaction file
+    :type input: pl.DataFrame
+    :param dump: print the head of the converted DataFrame (default: False)
+    :type dump: bool
+
     Returns
     -----------
     :return: A Polars DataFrame converted to Mint format
     :rtype: pl.DataFrame
     """
-    try:
-        df = pl.read_csv(input, try_parse_dates=True)
-    except:
-        print("Source CSV file was not able to be parsed properly.  Check that the file exists and is a valid CSV format.")
-        sys.exit()
-    print(df.head)
-    
+
     df = df.with_columns(
         pl.col("Original Statement").alias("Original Description"),
-        pl.col("Tags").str.replace(","," ").alias("Labels"),
+        pl.col("Tags").str.replace_all(","," ").alias("Labels"),
         pl.col("Account").alias("Account Name"),
         pl.when(pl.col("Amount") > 0)
             .then(pl.lit("credit"))
@@ -63,9 +87,7 @@ def _convert(input: str) -> pl.DataFrame:
     
     df = df.drop("Original Statement").drop("Merchant")
     
-    
-    print(df.head)
-    #df.select([pl.col('Col3'), pl.col('Col2'), pl.col('Col1)])
+    # export the DataFrame in the expected Mint CSV column order
     df_export=df.select([
         pl.col("Date"),
         pl.col("Description"),
@@ -76,30 +98,55 @@ def _convert(input: str) -> pl.DataFrame:
         pl.col("Account Name"), 
         pl.col("Labels"), 
         pl.col("Notes")  
-    ])    
-    
+    ])
+
+    if dump == True: print(df_export.head)
     return df_export
 
 
-def _output_mint_csv(df: pl.DataFrame, output: str) -> bool:
-    """Write out the dataframe in CSV format to the output path specified
+def convert_csv(source: str | Path | IO[str] | IO[bytes] | bytes, dump = False) -> pl.DataFrame:
+    """Public function wrapper: read a Monarch CSV transaction file, return as a pl.DataFrame
+
+    Parameters
+    ----------
+    :param source: a compatible type (str, Path, IO[str], IO[bytes], bytes) that points to a Monarch CSV transaction file
+    :type source: str, Path, IO[str], IO[bytes], bytes
+    :param dump: print the head of the resulting DataFrame (default: False)
+    :type dump: bool
+
+    Returns
+    -----------
+    :return: A Polars DataFrame
+    :rtype: pl.DataFrame
+    """
+
+    df = _read_csv(source, dump)
+    df = _convert(df, dump)
+    return df
+
+
+def write_mint_csv(df: pl.DataFrame, file: str | Path | IO[str] | IO[bytes] | bytes = None) -> str | None:
+    """Write out the dataframe in CSV format to destination specified via 'file'
 
     Parameters
     ----------
     :param df: The DataFrame to write
     :type df: pl.DataFrame 
-    :param output: File path to write CSV out
-    :type output: str
+    :param file: The output destination for the CSV file representing Mint-formatted transaction file, or None to return as string
+    :type output: str, Path, IO[str], IO[bytes], bytes
     
     Returns
     -----------
-    :return: If the CSV file was written successfully or not
-    :rtype: bool
+    :return: A CSV string representation of the DataFrame, or None if written out to file
+    :rtype: str | bool
     """
     
-    df.write_csv(output, date_format=("%m/%d/%Y"))
-    
-    return True
+    try:
+        csv_str = df.write_csv(file, date_format=("%m/%d/%Y"))
+        return csv_str
+    except:
+        print("Destination for CSV output file was not able to be written to.  Please check that proper parameters were provided.")
+        return None
 
 
 if __name__ == '__main__':
