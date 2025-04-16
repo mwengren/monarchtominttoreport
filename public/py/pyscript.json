@@ -1,9 +1,3 @@
 {
-    "packages": ["pyscript", "polars" ],
-
-    "files": {
-        "./monarchtominttoreport/convert.py": "./monarchtominttoreport/convert.py",
-        "./monarchtominttoreport/__init__.py": "./monarchtominttoreport/__init__.py"
-    }
-
+    "packages": ["pyscript", "polars", "monarchtominttoreport>=0.2a4"]
 }

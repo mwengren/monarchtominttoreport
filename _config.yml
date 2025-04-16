@@ -1,7 +1,7 @@
 # Setup
 title:               MonarchToMintToReport
 tagline:             'A simple tool to convert between accounting app file formats'
-description:         'The monarchtominttoreport package (https://pypi.org/project/monarchtominttoreport) does the simple task of converting a transactions file output from the [Monarch Money accounting app](https://www.monarchmoney.com/) to the format used by the former Mint app. The Mint format is used by the [MintToReport](https://minttoreport.com/) reporting tool, which is no longer actively supported or updated.' 
+description:         'MonarchToMintToReport: <a href="https://github.com/mwengren/monarchtominttoreport">https://github.com/mwengren/monarchtominttoreport</a>' 
 url:                 https://mwengren.github.io
 baseurl:             '/monarchtominttoreport'
 paginate:            5
