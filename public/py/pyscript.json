@@ -1,0 +1,9 @@
+{
+    "packages": ["pyscript", "polars" ],
+
+    "files": {
+        "./monarchtominttoreport/convert.py": "./monarchtominttoreport/convert.py",
+        "./monarchtominttoreport/__init__.py": "./monarchtominttoreport/__init__.py"
+    }
+
+}

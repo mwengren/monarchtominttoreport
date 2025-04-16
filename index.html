@@ -22,8 +22,12 @@ title: Home
     </div>
     
 </div>
+<!--
+<script src='{{ site.baseurl }}/public/js/script.js'></script>
+-->
+
 <!---->
-<script type="py" src="mtmtr_main.py" config="pyscript.json"></script>
+<script type="py" src="{{ site.baseurl }}/public/py/mtmtr_main.py" config="{{ site.baseurl }}/public/py/pyscript.json"></script>
 <!--
 "packages": ["pandas", "pyscript", "monarchtominttoreport>=0.2a4"],
 <script type="py" src="mtmtr_main.py" config="pyscript.toml"></script>
