@@ -3,9 +3,9 @@ layout: default
 title: Home
 ---
 
-<div>
-    The monarchtominttoreport package (https://pypi.org/project/monarchtominttoreport) does the simple task of converting a transactions file output from the [Monarch Money accounting app](https://www.monarchmoney.com/) to the format used by the former Mint app. The Mint format is used by the [MintToReport](https://minttoreport.com/) reporting tool, which is no longer actively supported or updated.
-</div>
+
+The monarchtominttoreport package (https://pypi.org/project/monarchtominttoreport) does the simple task of converting a transactions file output from the [Monarch Money accounting app](https://www.monarchmoney.com/) to the format used by the former Mint app. The Mint format is used by the [MintToReport](https://minttoreport.com/) reporting tool, which is no longer actively supported or updated.
+
 
 <script type="py">
     from pyscript import display
