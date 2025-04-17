@@ -1,7 +1,7 @@
 # Setup
 title:               MonarchToMintToReport
 tagline:             'A simple tool to convert between accounting app file formats'
-description:         'MonarchToMintToReport: <a href="https://github.com/mwengren/monarchtominttoreport"><img width="30" src="public/img/github-mark.png" /> MonarchToMintToReport</a>' 
+description:         '<a href="https://github.com/mwengren/monarchtominttoreport"><img width="30" src="public/img/github-mark.png" /> MonarchToMintToReport</a>' 
 url:                 https://mwengren.github.io
 baseurl:             '/monarchtominttoreport'
 paginate:            5

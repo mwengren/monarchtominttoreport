@@ -15,9 +15,9 @@ The monarchtominttoreport package (https://pypi.org/project/monarchtominttorepor
 </script>
 
 <div class="row overflow-hidden" id="content">
-    <div class="col mh-100 float-left" id="main">
+    <div class="float-left" id="main">
         <div id="fileinput"></div>
-        <input type="file" name="upload" id="upload">
+        <input type="file" name="upload" id="upload" class="mtmtr-button">
     </div>
     <!---->
     <div class="col mh-100 float-left" id="main">
