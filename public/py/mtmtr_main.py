@@ -25,7 +25,7 @@ async def processFile(*args):
     # df = monarchtominttoreport.convert.convert_csv(csv_file, dump = False)
     #df = monarchtominttoreport.convert_csv(csv_file, dump = False)
     df = convert_csv(csv_file, dump=False)
-    display(f"Completed.  CSV columns: {[col for col in df.columns]}")
+    display(f"Completed.  CSV columns: {[col for col in df.columns]}", target="convert-output")
 
 
 # Download file (based on: https://pyscript.recipes/2023.05.1/basic/file-download/)
